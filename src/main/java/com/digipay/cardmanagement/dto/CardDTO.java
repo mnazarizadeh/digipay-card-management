@@ -19,9 +19,7 @@ public class CardDTO {
     private String pan;
     private String cvv2;
     private Instant createDate;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate expireDate;
+    private String expireDate;
     private String pin;
     private String password;
     private Boolean active;

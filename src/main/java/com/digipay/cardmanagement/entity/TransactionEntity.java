@@ -6,6 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,7 +35,7 @@ public class TransactionEntity implements Serializable {
     private Double amount;
 
     @Column(name = "start_transaction", nullable = false)
-    private Instant startTransaction;
+    private LocalDateTime startTransaction;
 
     @Column(name = "verified", nullable = false, columnDefinition = "boolean default false")
     private Boolean verified;

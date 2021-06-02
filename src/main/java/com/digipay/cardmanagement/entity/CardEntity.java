@@ -33,7 +33,7 @@ public class CardEntity implements Serializable {
     private Instant createDate;
 
     @Column(name = "expire_date", nullable = false)
-    private LocalDate expireDate;
+    private String expireDate;
 
     @Column(name = "pin", nullable = false)
     private String pin;
