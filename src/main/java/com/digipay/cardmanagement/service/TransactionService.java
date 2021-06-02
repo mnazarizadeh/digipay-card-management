@@ -4,25 +4,19 @@ import com.digipay.cardmanagement.dto.TransactionDTO;
 import com.digipay.cardmanagement.dto.TransferDTO;
 import com.digipay.cardmanagement.entity.CardEntity;
 import com.digipay.cardmanagement.entity.TransactionEntity;
-import com.digipay.cardmanagement.exception.InvalidCardInfoException;
-import com.digipay.cardmanagement.exception.UnauthorizedException;
-import com.digipay.cardmanagement.mapper.CardMapper;
-import com.digipay.cardmanagement.mapper.MerchantMapper;
+import com.digipay.cardmanagement.exception.*;
 import com.digipay.cardmanagement.mapper.TransactionMapper;
 import com.digipay.cardmanagement.repository.CardRepository;
 import com.digipay.cardmanagement.repository.TransactionRepository;
 import com.digipay.cardmanagement.transaction.Transfer;
-import com.digipay.cardmanagement.transaction.TransferFactory;
-import com.digipay.cardmanagement.util.DateUtil;
+import com.digipay.cardmanagement.transaction.TransferContext;
+import com.digipay.cardmanagement.util.CardUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.Instant;
-import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -31,9 +25,8 @@ public class TransactionService {
 
     private final CardRepository cardRepository;
     private final TransactionRepository transactionRepository;
-    private final CardMapper cardMapper;
-    private final MerchantMapper merchantMapper;
     private final TransactionMapper transactionMapper;
+    private final TransferContext transferContext;
 
     @Transactional
     public Page<TransactionDTO> getMerchantTransactions(Long merchantId, Pageable pageable) {
@@ -43,15 +36,13 @@ public class TransactionService {
 
     @Transactional
     public TransactionDTO transfer(Long merchantId, TransferDTO transferDTO) {
-        CardEntity card = cardRepository.findByPanAndActiveIsTrue(transferDTO.getSource()).orElseThrow(UnauthorizedException::new);
+        CardEntity card = cardRepository.findByPanAndActiveIsTrue(transferDTO.getSource()).orElseThrow(CardNotFoundException::new);
 
         validateMerchant(card, merchantId);
 
         validateCardInfo(card, transferDTO);
 
-        TransferFactory transferFactory = new TransferFactory();
-
-        Transfer transfer = transferFactory.getTransfer(card.getPan().substring(0,6));
+        Transfer transfer = transferContext.getTransfer(card.getBin());
 
         transactionRepository.save(transfer.createTransaction(card, transferDTO));
 
@@ -65,8 +56,8 @@ public class TransactionService {
             throw new InvalidCardInfoException();
         if (!card.getExpireDate().equals(transferDTO.getExpireDate()))
             throw new InvalidCardInfoException();
-        if (DateUtil.convertExpireDate(card.getExpireDate()).isBefore(LocalDate.now()))
-            throw new InvalidCardInfoException();
+        if (!CardUtil.validateExpireDate(card.getExpireDate()))
+            throw new CardExpiredException();
         if (!card.getPassword().equals(transferDTO.getPassword()))
             throw new InvalidCardInfoException();
     }

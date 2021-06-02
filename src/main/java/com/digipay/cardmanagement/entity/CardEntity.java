@@ -52,4 +52,10 @@ public class CardEntity implements Serializable {
     @ToString.Exclude
     @OneToMany(mappedBy = "source", fetch = FetchType.LAZY)
     private Set<TransactionEntity> transactions = new HashSet<>();
+
+    public String getBin() {
+        if (pan == null || pan.length() < 16)
+            return null;
+        return pan.substring(0,6);
+    }
 }

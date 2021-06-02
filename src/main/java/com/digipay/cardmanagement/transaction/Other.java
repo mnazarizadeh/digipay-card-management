@@ -3,12 +3,14 @@ package com.digipay.cardmanagement.transaction;
 import com.digipay.cardmanagement.dto.TransferDTO;
 import com.digipay.cardmanagement.entity.CardEntity;
 import com.digipay.cardmanagement.entity.TransactionEntity;
+import com.digipay.cardmanagement.exception.BadRequestException;
 import com.digipay.cardmanagement.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -18,6 +20,10 @@ public class Other implements Transfer{
 
     @Override
     public TransactionEntity send() {
+        if (transaction == null || transaction.getId() == null)
+            throw new BadRequestException();
+
+        // do something for transfer
         transaction.setVerified(true);
         return transaction;
     }
@@ -37,6 +43,6 @@ public class Other implements Transfer{
 
     @Override
     public List<String> supportedPrefix() {
-        return null;
+        return new ArrayList<>();
     }
 }
