@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,14 +23,14 @@ public class CardEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "pan", nullable = false)
+    @Column(name = "pan", nullable = false, unique = true)
     private String pan;
 
     @Column(name = "cvv2", nullable = false)
     private String cvv2;
 
     @Column(name = "create_date", nullable = false)
-    private LocalDate createDate;
+    private Instant createDate;
 
     @Column(name = "expire_date", nullable = false)
     private LocalDate expireDate;
@@ -40,8 +41,8 @@ public class CardEntity implements Serializable {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "deposit", nullable = false)
-    private Double deposit;
+    @Column(name = "active", nullable = false, columnDefinition = "boolean default true")
+    private Boolean active;
 
     @ManyToOne
     @JoinColumn(name = "merchant_id", nullable = false)

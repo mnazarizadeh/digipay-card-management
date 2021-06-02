@@ -36,6 +36,6 @@ public class TransactionEntity implements Serializable {
     @Column(name = "start_transaction", nullable = false)
     private Instant startTransaction;
 
-    @Column(name = "verified", nullable = false, columnDefinition = "default false")
+    @Column(name = "verified", nullable = false, columnDefinition = "boolean default false")
     private Boolean verified;
 }

@@ -1,8 +1,12 @@
 package com.digipay.cardmanagement.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,11 +18,14 @@ public class CardDTO {
     private Long id;
     private String pan;
     private String cvv2;
-    private LocalDate createDate;
+    private Instant createDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate expireDate;
     private String pin;
     private String password;
-    private Double deposit;
+    private Boolean active;
+    @JsonIgnoreProperties(value = "cards")
     private MerchantDTO merchant;
     private Set<TransactionDTO> transactions = new HashSet<>();
 }
