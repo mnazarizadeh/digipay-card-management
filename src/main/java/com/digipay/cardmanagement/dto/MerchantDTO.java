@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,8 +15,11 @@ import java.util.Set;
 public class MerchantDTO {
 
     private Long id;
+    @NotNull
     private String firstname;
+    @NotNull
     private String lastname;
+    @NotNull
     private String phoneNumber;
     @JsonIgnoreProperties(value = "merchant")
     private Set<CardDTO> cards = new HashSet<>();

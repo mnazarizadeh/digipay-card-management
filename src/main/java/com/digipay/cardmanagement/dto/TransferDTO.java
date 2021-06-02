@@ -29,5 +29,6 @@ public class TransferDTO {
     @Positive
     private Double amount;
     @NotNull
+    @Length(min = 5)
     private String password;
 }
