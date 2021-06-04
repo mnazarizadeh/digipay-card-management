@@ -1,10 +1,7 @@
 package com.digipay.cardmanagement.controller;
 
-import com.digipay.cardmanagement.dto.CardDTO;
 import com.digipay.cardmanagement.dto.TransactionDTO;
 import com.digipay.cardmanagement.dto.TransferDTO;
-import com.digipay.cardmanagement.exception.IdExistsException;
-import com.digipay.cardmanagement.service.CardService;
 import com.digipay.cardmanagement.service.TransactionService;
 import com.digipay.cardmanagement.util.PaginationUtil;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 
 @RestController
