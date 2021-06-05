@@ -23,6 +23,14 @@ public class CardController {
 
     private final CardService cardService;
 
+    /**
+     * {@code POST  /cards} : register a card for merchant.
+     *
+     * @param merchantId    the ID of merchant in the header or sometimes could be a token
+     * @param cardDTO       the Card model to be created
+     * @return              card which created
+     * @throws URISyntaxException   {@code 400 (Bad Request)} if the url is incorrect
+     */
     @PostMapping("/cards")
     public ResponseEntity<CardDTO> createCard(@RequestHeader(value = "merchantId") Long merchantId,
                                               @RequestBody CardDTO cardDTO) throws URISyntaxException {
@@ -39,6 +47,13 @@ public class CardController {
                 .body(result);
     }
 
+    /**
+     * {@code GET  /cards} : retrieve all cards related to a merchant
+     *
+     * @param merchantId    the ID of merchant in the header or sometimes could be a token
+     * @param pageable      pagination info
+     * @return              list of cards owned by the merchant
+     */
     @GetMapping("/cards")
     public ResponseEntity<?> getAllOrganizations(@RequestHeader(value = "merchantId") Long merchantId,
                                                  Pageable pageable) {
@@ -50,6 +65,13 @@ public class CardController {
                 .body(page.getContent());
     }
 
+    /**
+     * {@code DELETE  /cards/:id} : disable the card related to "id"
+     *
+     * @param merchantId    the ID of merchant in the header or sometimes could be a token
+     * @param id            the ID of card to be disabled
+     * @return              OK if deleting done or error message
+     */
     @DeleteMapping("/cards/{id}")
     public ResponseEntity<Void> deleteCards(@RequestHeader(value = "merchantId") Long merchantId,
                                             @PathVariable Long id) {

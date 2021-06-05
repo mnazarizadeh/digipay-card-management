@@ -22,9 +22,16 @@ public class TransactionController {
 
     private final TransactionService transactionService;
 
+    /**
+     * {@code POST  /transfer} : transfer money
+     *
+     * @param merchantId    the ID of merchant in the header or sometimes could be a token
+     * @param transferDTO   the transfer details
+     * @return              transaction DTO
+     */
     @PostMapping("/transfer")
     public ResponseEntity<TransactionDTO> transfer(@RequestHeader(value = "merchantId") Long merchantId,
-                                                   @RequestBody TransferDTO transferDTO) throws URISyntaxException {
+                                                   @RequestBody TransferDTO transferDTO) {
         log.debug("REST request do a transfer : {}", transferDTO);
 
         TransactionDTO result = transactionService.transfer(merchantId, transferDTO);
@@ -33,6 +40,13 @@ public class TransactionController {
                 .body(result);
     }
 
+    /**
+     * {@code GET  /transactions} : retrieve list of merchant's verified transactions
+     *
+     * @param merchantId    the ID of merchant in the header or sometimes could be a token
+     * @param pageable      pagination info
+     * @return              list of transactions related to the merchant
+     */
     @GetMapping("/transactions")
     public ResponseEntity<?> getAllTransactions(@RequestHeader(value = "merchantId") Long merchantId,
                                                  Pageable pageable) {
